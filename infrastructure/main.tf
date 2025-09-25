@@ -107,7 +107,6 @@ resource "aws_lambda_function" "web" {
       PORT                = "3000"
       RUST_LOG            = "info"
       AWS_LWA_INVOKE_MODE = "response_stream"
-      ASSET_PREFIX        = "https://gag57tsrwlvut7vgwclxhvwlji0gtwpt.lambda-url.eu-central-1.on.aws"
     }
   }
 

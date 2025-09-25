@@ -17,12 +17,11 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Add AWS Lambda Web Adapter (as an extension)
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4 /lambda-adapter /opt/extensions/lambda-adapter
+COPY --from=public.ecr.aws/lambda/provided:al2 /lambda-adapter /opt/extensions/lambda-adapter
 
 ENV NODE_ENV=production
 ENV PORT=3000
-ENV RUST_LOG=info
-ENV AWS_LWA_INVOKE_MODE=response_stream
+ENV AWS_LWA_INVOKE_MODE=buffered
 
 # Use non-root user
 RUN addgroup --system --gid 1001 nodejs && \
@@ -33,9 +32,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone .
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
-USER nextjs
-
 # Lambda will route traffic via the adapter to this port
 EXPOSE 3000
 
+
+USER nextjs
 CMD ["node", "server.js"]

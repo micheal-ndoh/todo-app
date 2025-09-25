@@ -106,16 +106,19 @@ resource "aws_lambda_function" "web" {
     variables = {
       PORT                = "3000"
       RUST_LOG            = "info"
-      AWS_LWA_INVOKE_MODE = "response_stream"
-    }
+      AWS_LWA_INVOKE_MODE = "buffered"
+          }
   }
 
+  
   depends_on = [data.aws_ecr_image.latest, aws_iam_role_policy_attachment.lambda_basic]
 }
+
 
 resource "aws_lambda_function_url" "web" {
   function_name      = aws_lambda_function.web.function_name
   authorization_type = "NONE"
+  invoke_mode        = "BUFFERED"
   cors {
     allow_credentials = false
     allow_methods     = ["*"]

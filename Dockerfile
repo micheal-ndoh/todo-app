@@ -21,7 +21,6 @@ COPY --from=public.ecr.aws/lambda/provided:al2 /lambda-adapter /opt/extensions/l
 
 ENV NODE_ENV=production
 ENV PORT=3000
-ENV AWS_LWA_INVOKE_MODE=buffered
 
 # Use non-root user
 RUN addgroup --system --gid 1001 nodejs && \
